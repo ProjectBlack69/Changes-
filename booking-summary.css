@@ -1,0 +1,131 @@
+/* Booking Summary Page Styles */
+
+.booking-summary-page {
+    background-color: #8cbefff1;
+    padding: 20px;
+    
+}
+.booking-summary-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #000147f1;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+
+.booking-summary-page h1 {
+    font-size: 2.5rem;
+    color: #f1faee;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.booking-summary-page h3 {
+    font-size: 1.6rem;
+    color: #0073e6;
+    margin-bottom: 15px;
+}
+
+.summary-para {
+    margin-left: 30px;
+}
+
+.booking-summary-section {
+    margin-bottom: 25px;
+    padding: 10px;
+    background-color: #e5ebf3;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.booking-summary-section p {
+    font-size: 1rem;
+    color: #333;
+    margin: 5px 0;
+    padding-left: 20px; 
+}
+
+.booking-summary-section h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.booking-summary-page strong {
+    font-weight: bold;
+}
+
+.booking-summary-form {
+    margin-top: 20px;
+}
+
+/* Button Styling */
+.booking-summary-btn-submit {
+    background-color: #28a745;
+    color: #fff;
+    padding: 12px 24px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    font-family: "Lexend Deca", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.booking-summary-btn-submit:hover {
+    background-color: #218838;
+}
+
+/* Pricing Section Styling */
+.booking-summary-section h4 {
+    font-size: 1.5rem;
+    color: #ff0000;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.booking-summary-section h2 {
+    font-size: 1.5rem;
+    color: #cc0000;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Special Request Section */
+.booking-summary-textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    resize: vertical;
+}
+
+
+.booking-summary-page hr {
+    border: none;
+    border-top: 1px dotted black;
+    color: #fff;
+    background-color: #fff;
+    height: 1px;
+    width: 100%;
+  }
+
+/* Make the page responsive */
+@media (max-width: 768px) {
+    .booking-summary-container {
+        padding: 15px;
+    }
+    .booking-summary-page h1 {
+        font-size: 2rem;
+    }
+    .booking-summary-section p {
+        font-size: 0.9rem;
+    }
+}
