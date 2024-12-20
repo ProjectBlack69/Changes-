@@ -1,0 +1,254 @@
+
+{% extends 'customer/custabout.html' %}
+
+{% load static %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block about_extra %}
+
+<!-- Profile Form -->
+<div class="profile-container">
+    <!-- Sidebar Section -->
+    <div class="profile-sidebar">
+        <!-- Profile Section (Hidden in collapsed state) -->
+        <div class="profile-section">
+            <div class="profile-avatar">
+                <img src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'assets/default.jpeg' %}{% endif %}" alt="User Avatar" class="avatar-image">
+            </div>
+            <div class="profile-name">
+                <p class="username">{{ user.username }}</p>
+                <p class="user-role">{{ user.role|capfirst }}</p>
+            </div>
+            <div class="profile-actions">
+                <a href="{% url 'profile' %}" class="profile-button">Profile</a>
+            </div>
+        </div>
+        
+        <!-- Navigation Links -->
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'profile' %}">
+                    <i class="mdi mdi-account"></i>
+                    <span class="nav-text">Profile</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'customer-notifications' %}">
+                    <i class="mdi mdi-bell"></i>
+                    <span class="nav-text">Notifications</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'ticket' %}">
+                    <i class="mdi mdi-ticket"></i>
+                    <span class="nav-text">Ticket</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'booking_history' %}">
+                    <i class="mdi mdi-history"></i>
+                    <span class="nav-text">Booking History</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'loyalty_program' %}">
+                    <i class="mdi mdi-trophy"></i>
+                    <span class="nav-text">Loyalty Program</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'purchase_loyalty' %}">
+                    <i class="mdi mdi-credit-card-plus"></i>
+                    <span class="nav-text">Loyalty Card Purchase</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'special-request' %}">
+                    <i class="mdi mdi-clipboard-list"></i>
+                    <span class="nav-text">Special Request</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'feedback_reviews' %}">
+                    <i class="mdi mdi-comment-quote"></i>
+                    <span class="nav-text">Feedback and Reviews</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'itinerary' %}">
+                    <i class="mdi mdi-clipboard-list"></i>
+                    <span class="nav-text">Itinerary</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    {% block profile_extra %}
+
+    <!-- Main Profile Content -->
+    <main class="profile-main">
+        <div class="profile-cards">
+            <!-- Left Card: Personal Details -->
+            <div class="profile-card profile-card-left">
+                
+                <div class="personal-details">
+                    <h2>Personal Details</h2>
+
+                    <div id="customer-badge">{{ user.role|capfirst }}</div>
+                
+                    <!-- Flex Container for Picture and Personal Details -->
+                    <div class="profile-info-container">
+                        
+                        <!-- Profile Picture -->
+                        <div class="profile-picture" onclick="triggerFileInput()">
+                            <img 
+                                src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'assets/default.jpeg' %}{% endif %}" 
+                                alt="Profile Picture">
+                            <input 
+                                type="file" 
+                                id="profilePictureInput" 
+                                name="profile_picture" 
+                                style="display: none;" 
+                                onchange="handleFileChange(event)">
+                        </div>
+                                                                
+                        <!-- Personal Details Section -->
+                        <div class="profile-details">
+                            <div class="profile-form-field">
+                                <strong><h3>{{ customer.first_name }} {{ customer.last_name }}</h3></strong>
+                            </div>
+                            <div class="profile-form-field">
+                                <p><strong>Username:</strong> {{ user.username }}</p>
+                            </div>
+                            <div class="profile-form-field">
+                                <p><strong>Email:</strong> {{ user.email }}</p>
+                            </div>
+                            <div class="profile-form-field">
+                                <p><strong>Gender:</strong> {{ customer.gender }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Loyalty Card -->
+                <div class="profile-card-loyalty">
+                    <h2>Loyalty Program Details</h2>
+                    {% if user.customer_profile.loyalty_member %}
+                        <div class="profile-form-field">
+                            <h3>Loyalty Card Number:</h3>
+                            <p>{{ user.customer_profile.loyalty_program.loyalty_card_number }}</p>
+                        </div>
+                        <div class="profile-form-field">
+                            <h3>Points:</h3>
+                            <p>{{ user.customer_profile.loyalty_program.points }}</p>
+                        </div>
+                        <div class="profile-form-field">
+                            <h3>Membership Level:</h3>
+                            <p>{{ user.customer_profile.loyalty_program.level }}</p>
+                        </div>
+                    {% else %}
+                        <p class="no-loyalty-message">You are not a member of the loyalty program.</p>
+                        <a href="{% url 'purchase_loyalty' %}" class="btn btn-primary">Join Now</a>
+                    {% endif %}
+                </div>
+            </div>            
+
+            <!-- Right Card: Edit Details -->
+            <div class="profile-card profile-card-right">
+                <form method="post" enctype="multipart/form-data" class="profile-page-form">
+                    {% csrf_token %}
+                    <h2>Personal Information</h2>
+                    <div class="profile-form-field">
+                        <label for="id_username">Username</label>
+                        {{ user_form.username }}
+                    </div>
+                    <div class="profile-form-field">
+                        <label for="id_email">Email</label>
+                        {{ user_form.email }}
+                    </div>
+                    <div class="profile-form-field">
+                        <label for="id_first_name">First Name</label>
+                        {{ profile_form.first_name }}
+                    </div>
+                    <div class="profile-form-field">
+                        <label for="id_last_name">Last Name</label>
+                        {{ profile_form.last_name }}
+                    </div>
+                    <div class="profile-form-field">
+                        <label for="id_phone_number">Phone Number</label>
+                        {{ profile_form.phone_number }}
+                    </div>
+                    <div class="profile-form-field">
+                        <label for="id_address">Address</label>
+                        {{ profile_form.address }}
+                    </div>
+                    <div class="profile-form-field">
+                        <label for="id_date_of_birth">Date of Birth</label>
+                        {{ profile_form.date_of_birth }}
+                    </div>
+                    <div class="profile-form-field">
+                        <label for="id_gender">Gender</label>
+                        {{ profile_form.gender }}
+                    </div>
+                    <div class="profile-form-field">
+                        <label for="id_nationality">Nationality</label>
+                        {{ profile_form.nationality }}
+                    </div>
+                    <div class="profile-form-field">
+                        <label for="id_emergency_contact">Emergency Contact</label>
+                        {{ profile_form.emergency_contact }}
+                    </div>
+                    <div class="profile-form-field">
+                        <label for="id_preferred_language">Preferred Language</label>
+                        {{ profile_form.preferred_language }}
+                    </div>
+                    <div class="profile-form-field">
+                        <label for="id_preferred_currency">Preferred Currency</label>
+                        {{ profile_form.preferred_currency }}
+                    </div>
+                    <div class="profile-form-action-buttons">
+                        <button type="submit" name="update_profile" class="profile-submit-btn">Update Profile</button>
+                        <button type="button" class="profile-change-password-btn" onclick="openPasswordModal()">Change Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+                <!-- Modal Structure -->
+        <div id="updateModal" class="modal">
+            <div class="modal-content">
+                <p id="modalMessage"></p>
+                <button class="close">OK</buton>
+            </div>
+        </div>
+
+        <!-- Password Change Modal -->
+        <div id="profilePasswordModal" class="profile-password-modal">
+            <div class="profile-modal-content">
+                <span class="profile-close-btn" onclick="closePasswordModal()">&times;</span>
+                <h2>Change Password</h2><br>
+                <form method="post" class="profile-password-form">
+                    {% csrf_token %}
+                    <div class="profile-form-field">
+                        <label for="id_old_password">Old Password</label>
+                        {{ password_form.old_password }}
+                    </div>
+                    <div class="profile-form-field">
+                        <label for="id_new_password1">New Password</label>
+                        {{ password_form.new_password1 }}
+                    </div>
+                    <div class="profile-form-field">
+                        <label for="id_new_password2">Confirm New Password</label>
+                        {{ password_form.new_password2 }}
+                    </div>
+                    <div class="profile-form-action">
+                        <button type="submit" name="change_password" class="profile-submit-btn profile-submit-btn-password">Change Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    {% endblock %}
+</div>
+{% endblock %}
